@@ -9,38 +9,79 @@ NodeController = RouteController.extend({
         nodes = Nodes.find().fetch();
         return nodes;
     },
-    updateStaticNodeInfos: function() {
+    updateStaticNodeInfos: function () {
         Node = new NodeController();
         nodes = this.getNodes();
         existingNodes = {};
-        for(node in nodes) {
+        for (node in nodes) {
             existingNodes[nodes[node]._id] = nodes[node]._id;
         }
 
-        var url = "http://ffmap.freifunk-rheinland.net/nodes.json";
+        var url = Meteor.settings.ff.nodesUrl;
 
         HTTP.get(url, {}, function (err, response) {
-            body = response.content;
-            body = JSON.parse(body);
-            var i = 0;
-            for (node in body.nodes) {
-                i++;
-                if (node != undefined) {
+            if (!err && response.statusCode == 200) {
+                body = EJSON.parse(response.content);
 
-                    if (existingNodes[node] == undefined) {
-                        body.nodes[node]._id = node;
-                        var curNode = body.nodes[node];
-                        curNode = Nodes.insert(curNode, function (err, result) {
-                            //console.log(err);
-                            //console.log("node iseted: " + result);
+                var i = 0;
+                for (node in body.nodes) {
+                    i++;
+                    if (node != undefined) {
 
-                        });
-                    } else {
-                        console.log("node exists: " + node);
+                        if (existingNodes[node] == undefined) {
+                            body.nodes[node]._id = node;
+                            var curNode = body.nodes[node];
+                            curNode = Nodes.insert(curNode, function (err, result) {
+
+                            });
+                        } else {
+                        }
                     }
                 }
+                console.log("nodes: " + i);
+            } else {
+                console.log(err);
+                console.log(response.statusCode);
             }
-            console.log(i);
         });
+    },
+    updateNodeStatisticData: function () {
+        var url = Meteor.settings.ff.alfredMergedUrl;
+        HTTP.get(url, {}, function (err, response) {
+            if (!err && response.statusCode == 200) {
+                var nodes = EJSON.parse(response.content);
+
+                var i = 0;
+
+                for (node in nodes) {
+                    node = nodes[node];
+                    var nodeStatistic = {
+                        node_id: node.node_id,
+                        uptime: node.uptime,
+                        rootfs_usage: node.rootfs_usage,
+                        memory: node.memory,
+                        clients: node.clients,
+                        idletime: node.idletime,
+                        processes: node.processes,
+                        traffic: node.traffic,
+                        loadavg: node.loadavg,
+                        datetime: new Date()
+                    };
+
+                    NodeStatisticData.insert(nodeStatistic);
+
+                    if (i == 1) {
+                        console.log(node);
+                        console.log(nodeStatistic);
+                    }
+                    i++;
+                }
+                console.log("nodes: " + i);
+
+            } else {
+                console.log(err);
+                console.log(response.statusCode);
+            }
+        })
     }
 });

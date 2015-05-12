@@ -16,3 +16,5 @@ meteorhacks:npm
 npm-container
 aldeed:collection2
 http
+d3js:d3
+momentjs:moment
