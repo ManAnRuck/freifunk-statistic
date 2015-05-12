@@ -1,24 +1,17 @@
-/*****************************************************************************/
-/* Client and Server Methods */
-/*****************************************************************************/
-Meteor.methods({
-    /*
-     * Example:
-     *
-     * '/app/items/insert': function (item) {
-     *  if (this.isSimulation) {
-     *    // do some client stuff while waiting for
-     *    // result from server.
-     *    return;
-     *  }
-     *
-     *  // server method logic
-     * }
-     */
-    // Update nodelist
-    '/nodes/update': function () {
+NodeController = RouteController.extend({
+    layoutTemplate: 'MasterLayout',
+
+    subscriptions: function () {
+    },
+
+    // Get all saved Nodes
+    getNodes: function () {
+        nodes = Nodes.find().fetch();
+        return nodes;
+    },
+    updateStaticNodeInfos: function() {
         Node = new NodeController();
-        nodes = Node.getNodes();
+        nodes = this.getNodes();
         existingNodes = {};
         for(node in nodes) {
             existingNodes[nodes[node]._id] = nodes[node]._id;
