@@ -6,11 +6,10 @@ Meteor.startup(function () {
             return parser.text('every 5 minutes');
         },
         job: function () {
+            var nodeController = new NodeController();
             nodeController.updateNodeStatisticData();
             return true;
         }
     });
-    SyncedCron.start();
-    nodeController = new NodeController();
-    nodeController.updateStaticNodeInfos();
+    //SyncedCron.start();
 });
