@@ -1,15 +1,20 @@
 /*****************************************************************************/
 /* Home: Style */
 /*****************************************************************************/
-#chart div {
-    font: 10px sans-serif;
-    background-color: steelblue;
-    text-align: right;
-    padding: 3px;
-    margin: 1px;
-    color: white;
+
+#lineChart .axis path,
+#lineChart .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
-body {
-    background-color: grey;
+#lineChart .x.axis path {
+    display: none;
+}
+
+#lineChart .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }

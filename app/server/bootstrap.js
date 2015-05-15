@@ -4,6 +4,7 @@ Meteor.startup(function () {
         schedule: function (parser) {
             // parser is a later.parse object
             return parser.text('every 5 minutes');
+
         },
         job: function () {
             var nodeController = new NodeController();
@@ -11,5 +12,5 @@ Meteor.startup(function () {
             return true;
         }
     });
-    //SyncedCron.start();
+    SyncedCron.start();
 });
