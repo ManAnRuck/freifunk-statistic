@@ -8,7 +8,7 @@ Template.Home.events({});
 /*****************************************************************************/
 Template.Home.helpers({
     nodeStaticData: function () {
-            return EJSON.stringify(NodeStatisticData.find({node_id: '14cc20b10a90'}, {fields: {'clients.total':1, datetime: 1}}).fetch());
+            return EJSON.stringify(NodeStatisticData.find({node_id: '14cc20b10a90'}, {fields: {'clients.total':1, datetime: 1}, sort: {datetime: -1}}).fetch());
     }
 
 });
@@ -65,10 +65,10 @@ Template.Home.rendered = function () {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Price ($)");
+        .text("Clients");
 
     Deps.autorun(function(){
-        var dataset = NodeStatisticData.find({node_id: '14cc20b10a90'}, {fields: {'clients.total':1, datetime: 1}}).fetch();
+        var dataset = NodeStatisticData.find({node_id: '14cc20b10a90'}, {fields: {'clients.total':1, datetime: 1}, sort: {datetime: -1}}).fetch();
 
         var paths = svg.selectAll("path.line")
             .data([dataset]); //todo - odd syntax here - should use a key function, but can't seem to get that working
