@@ -7,10 +7,6 @@ Template.Home.events({});
 /* Home: Helpers */
 /*****************************************************************************/
 Template.Home.helpers({
-    nodeStaticData: function () {
-            return EJSON.stringify(NodeStatisticData.find({node_id: '14cc20b10a90'}, {fields: {'clients.total':1, datetime: 1}, sort: {datetime: -1}}).fetch());
-    }
-
 });
 
 /*****************************************************************************/
@@ -41,10 +37,10 @@ Template.Home.rendered = function () {
         .orient("left");
 
     var line = d3.svg.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(d.datetime);
         })
-        .y(function(d) {
+        .y(function (d) {
             return y(d.clients.total);
         });
 
@@ -67,15 +63,27 @@ Template.Home.rendered = function () {
         .style("text-anchor", "end")
         .text("Clients");
 
-    Deps.autorun(function(){
-        var dataset = NodeStatisticData.find({node_id: '14cc20b10a90'}, {fields: {'clients.total':1, datetime: 1}, sort: {datetime: -1}}).fetch();
+    Deps.autorun(function () {
+        var dataset = NodeStatisticData.find(
+            {
+                node_id: '14cc20b10a90',
+                datetime: {$gt: moment().subtract(1, 'days')._d}
+            }, {
+                fields: {'clients.total': 1, datetime: 1},
+                sort: {datetime: -1}
+            }).fetch();
 
         var paths = svg.selectAll("path.line")
             .data([dataset]); //todo - odd syntax here - should use a key function, but can't seem to get that working
 
 
-        x.domain(d3.extent(dataset, function(d) { return d.datetime; }));
-        y.domain(d3.extent(dataset, function(d) { return d.clients.total; }));
+        x.domain(d3.extent(dataset, function (d) {
+            return d.datetime;
+        }));
+        //y.domain(d3.extent(dataset, function(d) { return d.clients.total; }));
+        y.domain([0, d3.max(dataset, function (d) {
+            return d.clients.total
+        })]);
 
         //Update X axis
         svg.select(".x.axis")
