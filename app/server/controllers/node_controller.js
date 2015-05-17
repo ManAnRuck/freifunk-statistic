@@ -71,8 +71,6 @@ NodeController = RouteController.extend({
                     NodeStatisticData.insert(nodeStatistic);
 
                     if (i == 1) {
-                        console.log(node);
-                        console.log(nodeStatistic);
                     }
                     i++;
                 }

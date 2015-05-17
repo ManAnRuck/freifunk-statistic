@@ -1,12 +1,38 @@
 /*****************************************************************************/
 /* Home: Event Handlers */
 /*****************************************************************************/
-Template.Home.events({});
+Template.Home.events({
+    'change #chartTime': function (e, template, value) {
+        Session.set("chartTime", $(e.target).find(':selected').val());
+    }
+});
 
 /*****************************************************************************/
 /* Home: Helpers */
 /*****************************************************************************/
 Template.Home.helpers({
+    clientData: function () {
+        //dataset = NodeStatisticData.find(
+        //    {
+        //        node_id: '14cc20b10a90',
+        //        datetime: {$gt: moment().subtract(24, 'hours')._d}
+        //    }, {
+        //        fields: {'clients.total': 1, datetime: 1},
+        //        sort: {datetime: -1}
+        //    }).fetch();
+        //return EJSON.stringify(dataset);
+    },
+    selectValues: function() {
+        var hours = [];
+        var maxHours = 1000;
+        for(var i = 1; i <= maxHours; i++) {
+            hours.push(i);
+        }
+        return hours;
+    },
+    isSelectedValue: function (currentValue) {
+        return (Session.get("chartTime") == currentValue) ? true : false;
+    }
 });
 
 /*****************************************************************************/
@@ -14,6 +40,10 @@ Template.Home.helpers({
 /*****************************************************************************/
 Template.Home.created = function () {
     Meteor.subscribe("node_statistic_data", '14cc20b10a90');
+    console.log(Session.get("chartTime"));
+    if (!Session.get("chartTime")) {
+        Session.set("chartTime", 2);
+    }
 };
 
 Template.Home.rendered = function () {
@@ -63,16 +93,15 @@ Template.Home.rendered = function () {
         .style("text-anchor", "end")
         .text("Clients");
 
-    Deps.autorun(function () {
-        var dataset = NodeStatisticData.find(
+    Tracker.autorun(function () {
+        dataset = NodeStatisticData.find(
             {
                 node_id: '14cc20b10a90',
-                datetime: {$gt: moment().subtract(1, 'days')._d}
+                datetime: {$gt: moment().subtract(Session.get("chartTime"), 'hours')._d}
             }, {
                 fields: {'clients.total': 1, datetime: 1},
-                sort: {datetime: -1}
+                sort: {datetime: 1}
             }).fetch();
-
         var paths = svg.selectAll("path.line")
             .data([dataset]); //todo - odd syntax here - should use a key function, but can't seem to get that working
 
@@ -110,6 +139,7 @@ Template.Home.rendered = function () {
             .exit()
             .remove();
     });
+
 };
 
 
