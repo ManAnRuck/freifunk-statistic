@@ -5,8 +5,15 @@ Router.configure({
 });
 
 Router.route('/', {
-  name: 'home',
-  controller: 'HomeController',
-  action: 'action',
-  where: 'client'
+    name: 'home',
+    controller: 'HomeController',
+    action: 'action',
+    where: 'client'
+});
+
+Router.route('/node/:nodeId', {
+    name: 'nodes',
+    controller: 'NodeController',
+    action: 'action',
+    where: 'client'
 });

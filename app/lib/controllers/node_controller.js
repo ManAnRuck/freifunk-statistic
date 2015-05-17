@@ -1,0 +1,10 @@
+NodeController = RouteController.extend({
+    layoutTemplate: 'MasterLayout',
+
+    subscriptions: function() {
+    },
+
+    action: function() {
+        this.render('Node');
+    }
+});
