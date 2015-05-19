@@ -25,5 +25,7 @@ Meteor.startup(function () {
             return true;
         }
     });
+    var nodeController = new NodeController();
+    nodeController.updateStaticNodeInfos();
     SyncedCron.start();
 });

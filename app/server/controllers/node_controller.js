@@ -30,11 +30,13 @@ NodeController = RouteController.extend({
 
                         if (existingNodes[node] == undefined) {
                             body.nodes[node]._id = node;
+                            body.nodes[node].nodeinfo.hostname_lowercase = body.nodes[node].nodeinfo.hostname.toLowerCase();
                             var curNode = body.nodes[node];
                             Nodes.insert(curNode, function (err, result) {
                             });
                         } else {
                             body.nodes[node]._id = node;
+                            body.nodes[node].nodeinfo.hostname_lowercase = body.nodes[node].nodeinfo.hostname.toLowerCase();
                             var curNode = body.nodes[node];
                             Nodes.update({_id: curNode._id}, curNode);
                         }

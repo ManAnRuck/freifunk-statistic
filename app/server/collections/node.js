@@ -8,9 +8,10 @@ Meteor.publish("node", function (_id) {
     } else {
         return Nodes.find({
         }, {
-            fields: {'_id': 1, 'nodeinfo.hostname': 1, lastseen: 1, 'statistics': 1},
-            sort: {'nodeinfo.hostname': 1}
+            fields: {'_id': 1, 'nodeinfo.hostname': 1, lastseen: 1, 'statistics': 1, 'nodeinfo.hostname_lowercase': 1},
+            sort: {'nodeinfo.hostname_lowercase': 1}
         });
+
     }
 
 });

@@ -9,7 +9,8 @@ Template.Home.events({
 /*****************************************************************************/
 Template.Home.helpers({
     nodes: function() {
-        return Nodes.find({}, {sort: {'nodeinfo.hostname' : 1}}).fetch();
+        //return Nodes.find({}, {sort: {'nodeinfo.hostname' : 1}}).fetch();
+        return Nodes.find({}).fetch();
 
     },
     nodeColorClass: function(node) {
