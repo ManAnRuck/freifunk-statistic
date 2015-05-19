@@ -11,6 +11,15 @@ Template.Home.helpers({
     nodes: function() {
         return Nodes.find({}, {sort: {'nodeinfo.hostname' : 1}}).fetch();
 
+    },
+    nodeColorClass: function(node) {
+        if(node.statistics.uptime || node.statistics.clients > 0) {
+            return 'green';
+        } else if(moment(node.lastseen).format() > moment().subtract(1, 'days').format()) {
+            return 'orange';
+        } else {
+            return 'red';
+        }
     }
 });
 
@@ -22,7 +31,6 @@ Template.Home.created = function () {
 };
 
 Template.Home.rendered = function () {
-    console.log(Nodes.find({}).count());
 };
 
 

@@ -1,4 +1,5 @@
 <template name="Node">
+    <h1>{{nodeName}}</h1>
     <svg id="lineChart">
     </svg>
 
@@ -8,4 +9,7 @@
             <option value="{{this}}" selected="{{#if isSelectedValue this}}selected{{/if}}">{{this}}</option>
         {{/each}}
     </select>
+    <div>
+        {{nodeInfos}}
+    </div>
 </template>

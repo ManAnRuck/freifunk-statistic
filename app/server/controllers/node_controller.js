@@ -31,14 +31,15 @@ NodeController = RouteController.extend({
                         if (existingNodes[node] == undefined) {
                             body.nodes[node]._id = node;
                             var curNode = body.nodes[node];
-                            curNode = Nodes.insert(curNode, function (err, result) {
-
+                            Nodes.insert(curNode, function (err, result) {
                             });
                         } else {
+                            body.nodes[node]._id = node;
+                            var curNode = body.nodes[node];
+                            Nodes.update({_id: curNode._id}, curNode);
                         }
                     }
                 }
-                console.log("nodes: " + i);
             } else {
                 console.log(err);
                 console.log(response.statusCode);
@@ -74,7 +75,6 @@ NodeController = RouteController.extend({
                     }
                     i++;
                 }
-                console.log("nodes: " + i);
 
             } else {
                 console.log(err);

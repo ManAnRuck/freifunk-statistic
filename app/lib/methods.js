@@ -43,11 +43,9 @@ Meteor.methods({
 
                         });
                     } else {
-                        console.log("node exists: " + node);
                     }
                 }
             }
-            console.log(i);
         });
     }
 });

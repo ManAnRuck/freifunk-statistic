@@ -21,6 +21,18 @@ Template.Node.helpers({
     },
     isSelectedValue: function (currentValue) {
         return (Session.get("chartTime") == currentValue) ? true : false;
+    },
+    nodeName: function() {
+        var node = Nodes.findOne({_id: this.nodeId});
+        if(node) {
+            return node.nodeinfo.hostname;
+        }
+    },
+    nodeInfos: function() {
+        var node = Nodes.findOne({_id: this.nodeId});
+        if(node) {
+            return EJSON.stringify(node);
+        }
     }
 });
 
@@ -28,6 +40,7 @@ Template.Node.helpers({
 /* Node: Lifecycle Hooks */
 /*****************************************************************************/
 Template.Node.created = function () {
+    Meteor.subscribe("node", this.data.nodeId);
     Meteor.subscribe("node_statistic_data", this.data.nodeId);
     Session.set("chartTime", 2);
 };

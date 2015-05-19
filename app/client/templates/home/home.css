@@ -1,3 +1,30 @@
 /*****************************************************************************/
 /* Home: Style */
 /*****************************************************************************/
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+
+.green, .green a:link, .green a:visited, .green a:hover, .green a:active {
+    color: green;
+}
+
+.red, .red a:link, .red a:visited, .red a:hover, .red a:active {
+    color: red;
+}
+
+.orange, .orange a:link, .orange a:visited, .orange a:hover, .orange a:active {
+    color: orange;
+}

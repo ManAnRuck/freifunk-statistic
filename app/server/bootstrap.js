@@ -12,5 +12,18 @@ Meteor.startup(function () {
             return true;
         }
     });
+    SyncedCron.add({
+        name: 'Update Node Static Data',
+        schedule: function (parser) {
+            // parser is a later.parse object
+            return parser.text('every 15 minutes');
+
+        },
+        job: function () {
+            var nodeController = new NodeController();
+            nodeController.updateStaticNodeInfos();
+            return true;
+        }
+    });
     SyncedCron.start();
 });
