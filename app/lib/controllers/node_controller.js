@@ -6,5 +6,8 @@ NodeController = RouteController.extend({
 
     action: function() {
         this.render('Node');
+    },
+    data: function() {
+        return {nodeId: this.params.nodeId}
     }
 });

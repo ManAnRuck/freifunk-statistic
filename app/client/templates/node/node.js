@@ -11,21 +11,10 @@ Template.Node.events({
 /* Node: Helpers */
 /*****************************************************************************/
 Template.Node.helpers({
-    clientData: function () {
-        //dataset = NodeStatisticData.find(
-        //    {
-        //        node_id: '14cc20b10a90',
-        //        datetime: {$gt: moment().subtract(24, 'hours')._d}
-        //    }, {
-        //        fields: {'clients.total': 1, datetime: 1},
-        //        sort: {datetime: -1}
-        //    }).fetch();
-        //return EJSON.stringify(dataset);
-    },
-    selectValues: function() {
+    selectValues: function () {
         var hours = [];
         var maxHours = 1000;
-        for(var i = 1; i <= maxHours; i++) {
+        for (var i = 1; i <= maxHours; i++) {
             hours.push(i);
         }
         return hours;
@@ -39,14 +28,13 @@ Template.Node.helpers({
 /* Node: Lifecycle Hooks */
 /*****************************************************************************/
 Template.Node.created = function () {
-    Meteor.subscribe("node_statistic_data", '14cc20b10a90');
-    console.log(Session.get("chartTime"));
-    if (!Session.get("chartTime")) {
-        Session.set("chartTime", 2);
-    }
+    Meteor.subscribe("node_statistic_data", this.data.nodeId);
+    Session.set("chartTime", 2);
 };
 
 Template.Node.rendered = function () {
+    template = this;
+
     //Width and height
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = 1200 - margin.left - margin.right,
@@ -96,7 +84,7 @@ Template.Node.rendered = function () {
     Tracker.autorun(function () {
         dataset = NodeStatisticData.find(
             {
-                node_id: '14cc20b10a90',
+                node_id: template.data.nodeId,
                 datetime: {$gt: moment().subtract(Session.get("chartTime"), 'hours')._d}
             }, {
                 fields: {'clients.total': 1, datetime: 1},
