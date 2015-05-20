@@ -16,7 +16,7 @@ Template.Home.helpers({
     nodeColorClass: function(node) {
         if(node.statistics.uptime || node.statistics.clients > 0) {
             return 'green';
-        } else if(moment(node.lastseen).format() > moment().subtract(1, 'days').format()) {
+        } else if(moment(node.lastseen).format() > moment().subtract(1, 'hours').format()) {
             return 'orange';
         } else {
             return 'red';

@@ -52,11 +52,8 @@ Template.node_clients_chart.rendered = function () {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
+        .orient("bottom")
+        .tickFormat(d3.time.format("%H:%M"));
 
 
     var line = d3.svg.line()
@@ -102,10 +99,8 @@ Template.node_clients_chart.rendered = function () {
         var paths = svg.selectAll("path.line")
             .data([dataset]); //todo - odd syntax here - should use a key function, but can't seem to get that working
 
-        dataset.forEach(function(d) {
-            if(maxClients < d.clients.total) {
-                maxClients = d.clients.total;
-            }
+        maxClients = d3.max(dataset, function (d) {
+            return d.clients.total;
         });
 
         x.domain(d3.extent(dataset, function (d) {
@@ -121,6 +116,15 @@ Template.node_clients_chart.rendered = function () {
             .transition()
             .duration(1000)
             .call(xAxis);
+
+
+
+        yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(maxClients)
+            .tickFormat(d3.format("d"))
+            .tickSubdivide(0);
 
         //Update Y axis
         svg.select(".y.axis")
