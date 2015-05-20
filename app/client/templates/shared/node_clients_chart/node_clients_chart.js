@@ -36,14 +36,13 @@ Template.node_clients_chart.rendered = function () {
     Meteor.subscribe("node_statistic_data", this.data.nodeId);
     template = this;
 
-    function make_y_axis() {
-        return
-    }
+
 
     //Width and height
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = 1200 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
+
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -59,10 +58,6 @@ Template.node_clients_chart.rendered = function () {
         .scale(y)
         .orient("left");
 
-    var yGridAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(2);
 
     var line = d3.svg.line()
         .x(function (d) {
@@ -95,6 +90,7 @@ Template.node_clients_chart.rendered = function () {
         .attr("class", "grid");
 
     Tracker.autorun(function () {
+        var maxClients = 0;
         dataset = NodeStatisticData.find(
             {
                 node_id: template.data.nodeId,
@@ -106,13 +102,18 @@ Template.node_clients_chart.rendered = function () {
         var paths = svg.selectAll("path.line")
             .data([dataset]); //todo - odd syntax here - should use a key function, but can't seem to get that working
 
+        dataset.forEach(function(d) {
+            if(maxClients < d.clients.total) {
+                maxClients = d.clients.total;
+            }
+        });
 
         x.domain(d3.extent(dataset, function (d) {
             return d.datetime;
         }));
         //y.domain(d3.extent(dataset, function(d) { return d.clients.total; }));
         y.domain([0, d3.max(dataset, function (d) {
-            return d.clients.total
+            return d.clients.total;
         })]);
 
         //Update X axis
@@ -128,7 +129,10 @@ Template.node_clients_chart.rendered = function () {
             .call(yAxis);
 
         svg.select(".grid")
-            .call(yGridAxis
+            .call(d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .ticks(maxClients)
                 .tickSize(-width, 0, 0)
                 .tickFormat("")
         );
