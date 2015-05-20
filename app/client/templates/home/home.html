@@ -1,7 +1,7 @@
 <template name="Home">
     <ul>
         {{#each nodes}}
-            <li class="{{nodeColorClass this}}"><a href="/node/{{_id}}">{{nodeinfo.hostname}}</a> ###{{nodeinfo.hostname_lowercase}}###</li>
+            <li class="{{nodeColorClass this}}"><a href="/node/{{_id}}">{{nodeinfo.hostname}}</a></li>
         {{/each}}
     </ul>
 </template>

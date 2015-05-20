@@ -40,12 +40,12 @@ Template.Node.helpers({
 /* Node: Lifecycle Hooks */
 /*****************************************************************************/
 Template.Node.created = function () {
-    Meteor.subscribe("node", this.data.nodeId);
-    Meteor.subscribe("node_statistic_data", this.data.nodeId);
     Session.set("chartTime", 2);
 };
 
 Template.Node.rendered = function () {
+    Meteor.subscribe("node", this.data.nodeId);
+    Meteor.subscribe("node_statistic_data", this.data.nodeId);
     template = this;
 
     //Width and height
