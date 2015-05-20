@@ -1,14 +1,7 @@
 <template name="Node">
     <h1>{{nodeName}}</h1>
-    <svg id="lineChart">
-    </svg>
+    {{> node_clients_chart}}
 
-    <div>{{clientData}}</div>
-    <select id="chartTime">
-        {{#each selectValues}}
-            <option value="{{this}}" selected="{{#if isSelectedValue this}}selected{{/if}}">{{this}}</option>
-        {{/each}}
-    </select>
     <div>
         {{nodeInfos}}
     </div>

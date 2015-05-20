@@ -1,0 +1,28 @@
+/*****************************************************************************/
+/* Node: Style */
+/*****************************************************************************/
+
+#lineChart .axis path,
+#lineChart .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+/*#lineChart .x.axis path {*/
+    /*display: none;*/
+/*}*/
+
+#lineChart .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+    stroke-width: 0;
+}
