@@ -37,10 +37,9 @@ Template.node_clients_chart.rendered = function () {
     template = this;
 
 
-
     //Width and height
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 1200 - margin.left - margin.right,
+        width = parseInt(d3.select("#lineChart").style("width")) - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
 
@@ -67,7 +66,9 @@ Template.node_clients_chart.rendered = function () {
     var svg = d3.select("#lineChart")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
+        .style("background-color", "#999")
         .append("g")
+        .attr("class", "chart-line")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append("g")
@@ -97,7 +98,7 @@ Template.node_clients_chart.rendered = function () {
                 sort: {datetime: 1}
             }).fetch();
         var paths = svg.selectAll("path.line")
-            .data([dataset]); //todo - odd syntax here - should use a key function, but can't seem to get that working
+            .data([dataset]);
 
         maxClients = d3.max(dataset, function (d) {
             return d.clients.total;
@@ -106,7 +107,7 @@ Template.node_clients_chart.rendered = function () {
         x.domain(d3.extent(dataset, function (d) {
             return d.datetime;
         }));
-        //y.domain(d3.extent(dataset, function(d) { return d.clients.total; }));
+
         y.domain([0, d3.max(dataset, function (d) {
             return d.clients.total;
         })]);
@@ -116,7 +117,6 @@ Template.node_clients_chart.rendered = function () {
             .transition()
             .duration(1000)
             .call(xAxis);
-
 
 
         yAxis = d3.svg.axis()
@@ -148,11 +148,38 @@ Template.node_clients_chart.rendered = function () {
             .attr('d', line);
 
         paths
-            .attr('d', line); //todo - should be a transisition, but removed it due to absence of key
+            .attr('d', line);
 
         paths
             .exit()
             .remove();
+
+        function resize() {
+            width = parseInt(d3.select("#lineChart").style("width")) - margin.left - margin.right;
+            //d3.select("#lineChart")
+            //    .attr("width", width)
+            x.range([0, width]);
+
+            y.range([height, 0]);
+
+            svg.select(".grid")
+                .call(d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .ticks(maxClients)
+                    .tickSize(-width, 0, 0)
+                    .tickFormat("")
+            );
+
+            //Update X axis
+            svg.select(".x.axis")
+                .call(xAxis);
+
+            paths
+                .attr('d', line);
+        }
+
+        d3.select(window).on('resize', resize);
     });
 
 };

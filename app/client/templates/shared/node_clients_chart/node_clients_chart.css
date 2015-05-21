@@ -2,6 +2,10 @@
 /* Node: Style */
 /*****************************************************************************/
 
+#lineChart {
+    width: 100%;
+}
+
 #lineChart .axis path,
 #lineChart .axis line {
     fill: none;
